@@ -22,11 +22,11 @@ import { createShipmentLabel } from "~/lib/actions";
 import { AddressFieldSet } from "./address-field-set";
 
 const addressSchema = z.object({
-  name: z.string().min(1),
-  street1: z.string().min(1),
-  city: z.string().min(1),
-  state: z.string().min(1),
-  zip: z.string().min(1),
+  name: z.string().min(1, { error: "Name is required" }),
+  street1: z.string().min(1, { error: "Street address is required" }),
+  city: z.string().min(1, { error: "City is required" }),
+  state: z.string().min(1, { error: "State is required" }),
+  zip: z.string().min(1, { error: "ZIP code is required" }),
   phone: z.string().optional(),
   street2: z.string().optional(),
 });
@@ -35,10 +35,10 @@ const formSchema = z.object({
   fromAddress: addressSchema,
   toAddress: addressSchema,
   parcel: z.object({
-    length: z.number(),
-    width: z.number(),
-    height: z.number(),
-    weight: z.number(),
+    length: z.number({ error: "Length is required" }),
+    width: z.number({ error: "Width is required" }),
+    height: z.number({ error: "Height is required" }),
+    weight: z.number({ error: "Weight is required" }),
   }),
 });
 
