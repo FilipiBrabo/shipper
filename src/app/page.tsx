@@ -27,6 +27,7 @@ import { Input } from "~/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { createShipmentLabel } from "~/lib/actions";
 import { AddressFieldSet } from "./address-field-set";
+import { toast } from "sonner";
 
 const addressSchema = z.object({
   name: z.string().trim().min(1, { error: "Name is required" }),
@@ -42,10 +43,18 @@ const formSchema = z.object({
   fromAddress: addressSchema,
   toAddress: addressSchema,
   parcel: z.object({
-    length: z.number({ error: "Length is required" }),
-    width: z.number({ error: "Width is required" }),
-    height: z.number({ error: "Height is required" }),
-    weight: z.number({ error: "Weight is required" }),
+    length: z
+      .number({ error: "Length is required" })
+      .positive({ message: "Length must be greater than 0" }),
+    width: z
+      .number({ error: "Width is required" })
+      .positive({ message: "Width must be greater than 0" }),
+    height: z
+      .number({ error: "Height is required" })
+      .positive({ message: "Height must be greater than 0" }),
+    weight: z
+      .number({ error: "Weight is required" })
+      .positive({ message: "Weight must be greater than 0" }),
   }),
 });
 
@@ -87,8 +96,8 @@ export default function Home() {
     const { data: url, error } = await createShipmentLabel(data);
 
     if (error || !url) {
+      toast.error("Something went wrong creating the label. Please try again.");
       return;
-      // TODO: Handle error
     }
 
     window.open(url, "_blank");

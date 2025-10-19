@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { StampIcon } from "lucide-react";
+import { Toaster } from "~/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Shipper",
@@ -20,6 +21,7 @@ export default function RootLayout({
           USPS Shipping Labeler
         </h1>
         {children}
+        <Toaster />
       </body>
     </html>
   );

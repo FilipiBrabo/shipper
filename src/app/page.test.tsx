@@ -1,7 +1,8 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
+import { Toaster } from "~/components/ui/sonner";
 
 vi.mock("~/lib/actions", () => ({
   createShipmentLabel: vi.fn(),
@@ -37,10 +38,15 @@ describe("Home form flow", () => {
     expect(open).toHaveBeenCalledWith("https://label.test", "_blank");
   });
 
-  it("does not open new tab if we got an error", async () => {
+  it("does not open new tab if we got an error and shows a toast", async () => {
     // @ts-expect-error mocked
     createShipmentLabel.mockResolvedValue({ error: "No USPS rate found" });
-    render(<Home />);
+    render(
+      <>
+        <Home />
+        <Toaster />
+      </>
+    );
 
     const btn = screen.getByRole("button", { name: /next/i });
     await userEvent.click(btn);
@@ -53,6 +59,11 @@ describe("Home form flow", () => {
 
     expect(createShipmentLabel).toHaveBeenCalledTimes(1);
     expect(open).not.toHaveBeenCalled();
+
+    const toast = await screen.findByText(
+      /something went wrong creating the label\. please try again\./i
+    );
+    expect(toast).toBeVisible();
   });
 
   it("blocks first step next button if we have invalid form data", async () => {
