@@ -29,13 +29,13 @@ import { createShipmentLabel } from "~/lib/actions";
 import { AddressFieldSet } from "./address-field-set";
 
 const addressSchema = z.object({
-  name: z.string().min(1, { error: "Name is required" }),
-  street1: z.string().min(1, { error: "Street address is required" }),
-  city: z.string().min(1, { error: "City is required" }),
-  state: z.string().min(1, { error: "State is required" }),
-  zip: z.string().min(1, { error: "Postal code is required" }),
-  phone: z.string().optional(),
-  street2: z.string().optional(),
+  name: z.string().trim().min(1, { error: "Name is required" }),
+  street1: z.string().trim().min(1, { error: "Street address is required" }),
+  city: z.string().trim().min(1, { error: "City is required" }),
+  state: z.string().trim().min(1, { error: "State is required" }),
+  zip: z.string().trim().min(1, { error: "Postal code is required" }),
+  phone: z.string().trim().optional(),
+  street2: z.string().trim().optional(),
 });
 
 const formSchema = z.object({
