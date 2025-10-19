@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### Quick start
 
-## Getting Started
+#### 1. Requirements
 
-First, run the development server:
+- Node 18+
+- pnpm
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+#### 2. Install deps
+
+```
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 3. Configure environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env` file in the project root and fill it following `.env.example`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### 4. Run the app
 
-## Learn More
+```bash
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Assumptions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- User will only fill valid US address.
+- User will just want the label and not any other information about the shipment. To simplify, after the form is submitted we're opening a new tab with the label to be printed.
+- We assume user will always want to choose the lowest cost USPS shipment.
+- Left the form pre-filled to easily test the label creation.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Known bugs
 
-## Deploy on Vercel
+- Opening state select breaks the layout. Not sure what's happening here, spent a few minutes but couldn't find the root cause in time.
+- Unable to erase number inputs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### What I’d do next
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Fix select layout bug
+- Fix number input not being able to be erased
+- Add address verification and suggestions using Google Maps API or similar services.
+- Show available USPS shipping options (cost, ETA) and let the user choose before purchase/generating the label.
+- Better error handling, show a more specific error message if we have that information from EasyPost API.
+- Improve tests: test form validation, add e2e tests using Playwright.
+- Improve UI in general by customizing shadcn styles and redesigning the app to look better.
+
+### Tech stack
+
+- Next.js App Router, React, TypeScript
+- Form/validation: react-hook-form + zod
+- UI: Shadcn
+- Testing: Vitest + Testing Library
+- Lint/format: Biome
