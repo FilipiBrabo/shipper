@@ -8,6 +8,7 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { UsStateSelect } from "~/components/ui/us-state-select";
 import type { ShipmentFormData } from "./page";
 
 export function AddressFieldSet({
@@ -83,36 +84,46 @@ export function AddressFieldSet({
             </Field>
           )}
         />
-        <Controller
-          name={`${type}.city`}
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={`${type}.city`}>City</FieldLabel>
-              <Input
-                id={`${type}.city`}
-                {...field}
-                aria-invalid={fieldState.invalid}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name={`${type}.state`}
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={`${type}.state`}>State</FieldLabel>
-              <Input
-                id={`${type}.state`}
-                {...field}
-                aria-invalid={fieldState.invalid}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
+        <div className="grid grid-cols-3 gap-3">
+          <Controller
+            name={`${type}.city`}
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="col-span-2">
+                <FieldLabel htmlFor={`${type}.city`}>City</FieldLabel>
+                <Input
+                  id={`${type}.city`}
+                  {...field}
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            name={`${type}.state`}
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={`${type}.state`}>State</FieldLabel>
+                <UsStateSelect
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  triggerProps={{
+                    id: `${type}.state`,
+                    "aria-invalid": fieldState.invalid,
+                    className: "w-full",
+                  }}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </div>
         <Controller
           name={`${type}.zip`}
           control={form.control}
