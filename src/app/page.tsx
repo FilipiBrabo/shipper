@@ -26,7 +26,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { createShipmentLabel } from "~/lib/actions";
-import { AddressFieldSet } from "./address-field-set";
+import { AddressFieldSet } from "../components/address-field-set";
 import { toast } from "sonner";
 
 const addressSchema = z.object({

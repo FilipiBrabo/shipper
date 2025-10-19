@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { UsStateSelect } from "~/components/ui/us-state-select";
-import type { ShipmentFormData } from "./page";
+import type { ShipmentFormData } from "../app/page";
 
 export function AddressFieldSet({
   legend,
