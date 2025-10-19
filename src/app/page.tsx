@@ -1,11 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { TabsContent } from "@radix-ui/react-tabs";
 import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import {
   Field,
   FieldError,
@@ -15,6 +17,7 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { createShipmentLabel } from "~/lib/actions";
 import { AddressFieldSet } from "./address-field-set";
 
@@ -42,7 +45,10 @@ const formSchema = z.object({
 export type ShipmentFormData = z.infer<typeof formSchema>;
 
 export default function Home() {
+  const [tab, setTab] = useState<"sender" | "recipient" | "package">("sender");
+
   const form = useForm<ShipmentFormData>({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       fromAddress: {
@@ -84,128 +90,196 @@ export default function Home() {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <Card>
-          <CardContent>
-            <AddressFieldSet legend="Sender" type="fromAddress" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <AddressFieldSet legend="Recipient" type="toAddress" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <FieldSet>
-              <FieldLegend>Package</FieldLegend>
-              <FieldGroup>
-                <Controller
-                  name="parcel.length"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Length (in)</FieldLabel>
-                      <Input
-                        type="number"
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === ""
-                              ? undefined
-                              : Number(e.target.value)
-                          )
-                        }
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+        <Tabs value={tab}>
+          <TabsList className="w-full">
+            <TabsTrigger value="sender">Sender</TabsTrigger>
+            <TabsTrigger value="recipient">Recipient</TabsTrigger>
+            <TabsTrigger value="package">Package</TabsTrigger>
+          </TabsList>
+          <TabsContent value="sender">
+            <Card>
+              <CardContent>
+                <AddressFieldSet legend="Sender" type="fromAddress" />
+              </CardContent>
+              <CardFooter>
+                <Button
+                  className="ml-auto"
+                  type="button"
+                  disabled={!!form.formState.errors["fromAddress"]}
+                  onClick={async () => {
+                    const isValid = await form.trigger("fromAddress", {
+                      shouldFocus: true,
+                    });
+                    if (isValid) {
+                      setTab("recipient");
+                    }
+                  }}
+                >
+                  Next
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="recipient">
+            <Card>
+              <CardContent>
+                <AddressFieldSet legend="Recipient" type="toAddress" />
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => setTab("sender")}
+                >
+                  Previous
+                </Button>
+                <Button
+                  className="ml-auto"
+                  type="button"
+                  disabled={!!form.formState.errors["toAddress"]}
+                  onClick={async () => {
+                    const isValid = await form.trigger("toAddress");
+                    if (isValid) {
+                      setTab("package");
+                    }
+                  }}
+                >
+                  Next
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="package">
+            <Card>
+              <CardContent>
+                <FieldSet>
+                  <FieldLegend>Package</FieldLegend>
+                  <FieldGroup>
+                    <Controller
+                      name="parcel.length"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Length (in)</FieldLabel>
+                          <Input
+                            type="number"
+                            value={field.value ?? ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? undefined
+                                  : Number(e.target.value)
+                              )
+                            }
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
                       )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name="parcel.width"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Width (in)</FieldLabel>
-                      <Input
-                        type="number"
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === ""
-                              ? undefined
-                              : Number(e.target.value)
-                          )
-                        }
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+                    />
+                    <Controller
+                      name="parcel.width"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Width (in)</FieldLabel>
+                          <Input
+                            type="number"
+                            value={field.value ?? ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? undefined
+                                  : Number(e.target.value)
+                              )
+                            }
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
                       )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name="parcel.height"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Height (in)</FieldLabel>
-                      <Input
-                        type="number"
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === ""
-                              ? undefined
-                              : Number(e.target.value)
-                          )
-                        }
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+                    />
+                    <Controller
+                      name="parcel.height"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Height (in)</FieldLabel>
+                          <Input
+                            type="number"
+                            value={field.value ?? ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? undefined
+                                  : Number(e.target.value)
+                              )
+                            }
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
                       )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name="parcel.weight"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Weight (oz)</FieldLabel>
-                      <Input
-                        type="number"
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value === ""
-                              ? undefined
-                              : Number(e.target.value)
-                          )
-                        }
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
+                    />
+                    <Controller
+                      name="parcel.weight"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel>Weight (oz)</FieldLabel>
+                          <Input
+                            type="number"
+                            value={field.value ?? ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === ""
+                                  ? undefined
+                                  : Number(e.target.value)
+                              )
+                            }
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
                       )}
-                    </Field>
+                    />
+                  </FieldGroup>
+                </FieldSet>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => setTab("recipient")}
+                >
+                  Previous
+                </Button>
+                <Button
+                  type="submit"
+                  className="ml-auto"
+                  disabled={
+                    form.formState.isSubmitting ||
+                    !!form.formState.errors["parcel"]
+                  }
+                >
+                  {form.formState.isSubmitting ? (
+                    <Loader2Icon />
+                  ) : (
+                    "Create USPS Label"
                   )}
-                />
-              </FieldGroup>
-            </FieldSet>
-          </CardContent>
-        </Card>
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? <Loader2Icon /> : "Create USPS Label"}
-        </Button>
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </form>
     </FormProvider>
   );
