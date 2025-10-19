@@ -205,7 +205,10 @@ export default function Home() {
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel>Length (in)</FieldLabel>
+                          <FieldLabel>
+                            Length (in)
+                            <span className="text-destructive">*</span>
+                          </FieldLabel>
                           <Input
                             type="number"
                             value={field.value ?? ""}
@@ -229,7 +232,10 @@ export default function Home() {
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel>Width (in)</FieldLabel>
+                          <FieldLabel>
+                            Width (in)
+                            <span className="text-destructive">*</span>
+                          </FieldLabel>
                           <Input
                             type="number"
                             value={field.value ?? ""}
@@ -253,7 +259,10 @@ export default function Home() {
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel>Height (in)</FieldLabel>
+                          <FieldLabel>
+                            Height (in)
+                            <span className="text-destructive">*</span>
+                          </FieldLabel>
                           <Input
                             type="number"
                             value={field.value ?? ""}
@@ -277,7 +286,10 @@ export default function Home() {
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel>Weight (oz)</FieldLabel>
+                          <FieldLabel>
+                            Weight (oz)
+                            <span className="text-destructive">*</span>
+                          </FieldLabel>
                           <Input
                             type="number"
                             value={field.value ?? ""}

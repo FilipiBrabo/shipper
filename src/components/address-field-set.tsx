@@ -29,7 +29,10 @@ export function AddressFieldSet({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={`${type}.name`}>Name</FieldLabel>
+              <FieldLabel htmlFor={`${type}.name`}>
+                Name
+                <span className="text-destructive">*</span>
+              </FieldLabel>
               <Input
                 id={`${type}.name`}
                 {...field}
@@ -59,7 +62,9 @@ export function AddressFieldSet({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={`${type}.street1`}>Street 1</FieldLabel>
+              <FieldLabel htmlFor={`${type}.street1`}>
+                Street 1<span className="text-destructive">*</span>
+              </FieldLabel>
               <Input
                 id={`${type}.street1`}
                 {...field}
@@ -90,7 +95,10 @@ export function AddressFieldSet({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="col-span-2">
-                <FieldLabel htmlFor={`${type}.city`}>City</FieldLabel>
+                <FieldLabel htmlFor={`${type}.city`}>
+                  City
+                  <span className="text-destructive">*</span>
+                </FieldLabel>
                 <Input
                   id={`${type}.city`}
                   {...field}
@@ -107,7 +115,10 @@ export function AddressFieldSet({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={`${type}.state`}>State</FieldLabel>
+                <FieldLabel htmlFor={`${type}.state`}>
+                  State
+                  <span className="text-destructive">*</span>
+                </FieldLabel>
                 <UsStateSelect
                   value={field.value}
                   onValueChange={field.onChange}
@@ -129,7 +140,10 @@ export function AddressFieldSet({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Postal Code</FieldLabel>
+              <FieldLabel>
+                Postal Code
+                <span className="text-destructive">*</span>
+              </FieldLabel>
               <Input {...field} aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
