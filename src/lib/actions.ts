@@ -13,6 +13,9 @@ export async function createShipmentLabel(data: ShipmentFormData) {
       from_address: { ...data.fromAddress, country: "US" },
       to_address: { ...data.toAddress, country: "US" },
       parcel: data.parcel,
+      options: {
+        label_format: "PDF",
+      },
     });
   } catch (error) {
     console.error("Error creating shipment", error);
