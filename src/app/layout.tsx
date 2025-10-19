@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { StampIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Shipper",
@@ -13,7 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background p-4 max-w-2xl mx-auto">{children}</body>
+      <body className="bg-background p-4 max-w-2xl mx-auto">
+        <h1 className="text-2xl font-bold text-center mb-8 flex items-center justify-center gap-2">
+          <StampIcon />
+          USPS Shipping Labeler
+        </h1>
+        {children}
+      </body>
     </html>
   );
 }

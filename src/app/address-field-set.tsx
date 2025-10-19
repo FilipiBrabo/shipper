@@ -15,7 +15,7 @@ export function AddressFieldSet({
   legend,
   type,
 }: {
-  legend: string;
+  legend: React.ReactNode;
   type: "fromAddress" | "toAddress";
 }) {
   const form = useFormContext<ShipmentFormData>();

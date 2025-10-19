@@ -2,7 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TabsContent } from "@radix-ui/react-tabs";
-import { Loader2Icon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  Loader2Icon,
+  PackageIcon,
+  UserCheckIcon,
+  UserIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import z from "zod";
@@ -26,7 +33,7 @@ const addressSchema = z.object({
   street1: z.string().min(1, { error: "Street address is required" }),
   city: z.string().min(1, { error: "City is required" }),
   state: z.string().min(1, { error: "State is required" }),
-  zip: z.string().min(1, { error: "ZIP code is required" }),
+  zip: z.string().min(1, { error: "Postal code is required" }),
   phone: z.string().optional(),
   street2: z.string().optional(),
 });
@@ -92,14 +99,30 @@ export default function Home() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <Tabs value={tab}>
           <TabsList className="w-full">
-            <TabsTrigger value="sender">Sender</TabsTrigger>
-            <TabsTrigger value="recipient">Recipient</TabsTrigger>
-            <TabsTrigger value="package">Package</TabsTrigger>
+            <TabsTrigger value="sender">
+              <UserIcon />
+              Sender
+            </TabsTrigger>
+            <TabsTrigger value="recipient">
+              <UserCheckIcon />
+              Recipient
+            </TabsTrigger>
+            <TabsTrigger value="package">
+              <PackageIcon />
+              Package
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="sender">
             <Card>
               <CardContent>
-                <AddressFieldSet legend="Sender" type="fromAddress" />
+                <AddressFieldSet
+                  legend={
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="size-5" /> Sender
+                    </div>
+                  }
+                  type="fromAddress"
+                />
               </CardContent>
               <CardFooter>
                 <Button
@@ -116,6 +139,7 @@ export default function Home() {
                   }}
                 >
                   Next
+                  <ArrowRightIcon />
                 </Button>
               </CardFooter>
             </Card>
@@ -123,7 +147,14 @@ export default function Home() {
           <TabsContent value="recipient">
             <Card>
               <CardContent>
-                <AddressFieldSet legend="Recipient" type="toAddress" />
+                <AddressFieldSet
+                  legend={
+                    <div className="flex items-center gap-2">
+                      <UserCheckIcon className="size-5" /> Recipient
+                    </div>
+                  }
+                  type="toAddress"
+                />
               </CardContent>
               <CardFooter>
                 <Button
@@ -131,6 +162,7 @@ export default function Home() {
                   type="button"
                   onClick={() => setTab("sender")}
                 >
+                  <ArrowLeftIcon />
                   Previous
                 </Button>
                 <Button
@@ -145,6 +177,7 @@ export default function Home() {
                   }}
                 >
                   Next
+                  <ArrowRightIcon />
                 </Button>
               </CardFooter>
             </Card>
@@ -153,7 +186,10 @@ export default function Home() {
             <Card>
               <CardContent>
                 <FieldSet>
-                  <FieldLegend>Package</FieldLegend>
+                  <FieldLegend className="flex items-center gap-2">
+                    <PackageIcon className="size-5" />
+                    Package
+                  </FieldLegend>
                   <FieldGroup>
                     <Controller
                       name="parcel.length"
@@ -260,6 +296,7 @@ export default function Home() {
                   type="button"
                   onClick={() => setTab("recipient")}
                 >
+                  <ArrowLeftIcon />
                   Previous
                 </Button>
                 <Button
